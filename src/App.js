@@ -19,6 +19,7 @@ const CSSVariables = styled.div`
   --bg-color: #394263;
   --white: #ffffff;
   --light-green: #03bea4;
+  --disabled: #bababa;
 `;
 
 const Header = styled.div`

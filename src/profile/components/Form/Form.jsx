@@ -2,15 +2,33 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 class Form extends Component {
+  state = {
+    inputEmpty: true,
+  };
+
+  handleInputChange = (event) => {
+    this.setState({ inputEmpty: event.target.value.length === 0 });
+  };
+
   render() {
     return (
       <form className={`form ${this.props.className}`}>
         <Label className="label">
           Enter Steam client ID
           <br />
-          <Input className="form__input" type="text" name="name" />
+          <Input
+            className="form__input"
+            type="text"
+            name="name"
+            onChange={this.handleInputChange}
+          />
         </Label>
-        <Button className="form__button" type="submit" value="Submit" />
+        <Button
+          className="form__button"
+          type="submit"
+          value="Submit"
+          disabled={this.state.inputEmpty}
+        />
       </form>
     );
   }
@@ -25,7 +43,7 @@ const Input = styled.input`
 `;
 
 const Button = styled.input`
-  background: var(--light-green);
+  background: ${props => (props.disabled ? 'var(--disabled)' : 'var(--light-green)')};
   border: none;
   padding: 10px 16px;
   font-size: 1.2rem;
@@ -34,7 +52,7 @@ const Button = styled.input`
   color: var(--white);
 
   &:hover {
-    cursor: pointer;
+    cursor: ${props => (props.disabled ? 'auto' : 'pointer')};
   }
 `;
 
