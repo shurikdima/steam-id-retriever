@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Form from './profile/components/Form/Form';
+import ProfileContainer from './profile/components/ProfileContainer/ProfileContainer';
 import styled from 'styled-components';
 import steamLogo from './profile/img/steam-logo.svg';
 
@@ -11,6 +12,7 @@ const App = ({ className }) => (
         <Header className="header">SteamID Information Retriever</Header>
       </HeaderContainer>
       <Form />
+      <ProfileContainer />
     </div>
   </CSSVariables>
 );
@@ -20,6 +22,8 @@ const CSSVariables = styled.div`
   --white: #ffffff;
   --light-green: #03bea4;
   --disabled: #bababa;
+  --red: #dd0000;
+  --green: #00dd00;
 `;
 
 const Header = styled.div`
@@ -50,6 +54,7 @@ const StyledApp = styled(App)`
   height: 100vh;
   background-color: var(--bg-color);
   position: relative;
+  font-family: 'Roboto';
 `;
 
 export default StyledApp;

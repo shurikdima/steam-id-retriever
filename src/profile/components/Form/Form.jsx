@@ -10,6 +10,10 @@ class Form extends Component {
     this.setState({ inputEmpty: event.target.value.length === 0 });
   };
 
+  handleButtonClick = (event) => {
+    event.preventDefault();
+  };
+
   render() {
     return (
       <form className={`form ${this.props.className}`}>
@@ -19,7 +23,7 @@ class Form extends Component {
           <Input
             className="form__input"
             type="text"
-            name="name"
+            name="steamID"
             onChange={this.handleInputChange}
           />
         </Label>
@@ -28,6 +32,7 @@ class Form extends Component {
           type="submit"
           value="Submit"
           disabled={this.state.inputEmpty}
+          onClick={this.handleButtonClick}
         />
       </form>
     );
@@ -50,6 +55,7 @@ const Button = styled.input`
   font-weight: 700;
   text-transform: uppercase;
   color: var(--white);
+  pointer-events: ${props => (props.disabled ? 'none' : 'all')};
 
   &:hover {
     cursor: ${props => (props.disabled ? 'auto' : 'pointer')};
@@ -66,9 +72,9 @@ const StyledForm = styled(Form)`
   box-shadow: 0px 0px 30px 4px #333;
   position: absolute;
   left: 50%;
-  top: 160px;
+  top: 50%;
   border-radius: 4px;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   padding: 40px 80px 30px 80px;
   text-align: center;
 `;
