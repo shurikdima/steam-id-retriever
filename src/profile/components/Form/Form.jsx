@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { API_KEY, STEAM_ID } from '../../../steam-api/config';
 
 class Form extends Component {
   state = {
@@ -10,8 +11,15 @@ class Form extends Component {
     this.setState({ inputEmpty: event.target.value.length === 0 });
   };
 
-  handleButtonClick = (event) => {
+  handleButtonClick = async (event) => {
     event.preventDefault();
+    const requestPath = `https://api.steampowered.com/IPlayerService/GetSteamLevel/v1?key=${API_KEY}&steamid=${STEAM_ID}`;
+
+    // needed for CORS to work without any configuration
+    const proxy = 'https://cors-anywhere.herokuapp.com/';
+    const response = await fetch(`${proxy}${requestPath}`);
+    const responseJSON = await response.json();
+    console.log(responseJSON.response);
   };
 
   render() {
@@ -67,16 +75,12 @@ const Label = styled.label`
 `;
 
 const StyledForm = styled(Form)`
-  display: inline-block;
   background-color: var(--white);
   box-shadow: 0px 0px 30px 4px #333;
-  position: absolute;
-  left: 50%;
-  top: 50%;
   border-radius: 4px;
-  transform: translate(-50%, -50%);
   padding: 40px 80px 30px 80px;
   text-align: center;
+  margin: 100px 0 40px 0;
 `;
 
 export default StyledForm;

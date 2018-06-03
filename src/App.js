@@ -13,8 +13,7 @@ const App = ({ className }) => (
         <Logo className="logo" src={steamLogo} />
         <Header className="header">SteamID Information Retriever</Header>
       </HeaderContainer>
-      <GamesList />
-      <Arrow src={arrow} />
+      <Form />
     </div>
   </CSSVariables>
 );

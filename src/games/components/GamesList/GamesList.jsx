@@ -26,18 +26,6 @@ class GamesList extends Component {
   }
 }
 
-const StyledGamesList = styled(GamesList)`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 80%;
-  min-height: 300px;
-  border-radius: 8px;
-  background: linear-gradient(#141e30, #243b55);
-  box-shadow: 0px 0px 16px 2px;
-  margin: 100px 0 40px 0;
-`;
-
 const Title = styled.div`
   font-size: 2.4rem;
   font-weight: 500;
@@ -76,6 +64,18 @@ const Hours = styled.div`
 const AppID = styled.div`
   width: 25%;
   text-align: center;
+`;
+
+const StyledGamesList = styled(GamesList)`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 80%;
+  min-height: 300px;
+  border-radius: 8px;
+  background: linear-gradient(#141e30, #243b55);
+  box-shadow: 0px 0px 16px 2px;
+  margin: 70px 0 40px 0;
 `;
 
 export default StyledGamesList;

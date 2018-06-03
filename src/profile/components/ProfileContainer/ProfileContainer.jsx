@@ -70,16 +70,15 @@ const Button = styled.input`
 
 const StyledProfileContainer = styled(ProfileContainer)`
   background: linear-gradient(#141e30, #243b55);
-  position: absolute;
   width: 300px;
   height: 500px;
-  left: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   border-radius: 12px;
   box-shadow: 0px 0px 16px 2px;
+  margin: 70px 0 40px 0;
 `;
 
 export default StyledProfileContainer;
