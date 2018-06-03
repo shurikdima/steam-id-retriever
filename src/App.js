@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import Form from './profile/components/Form/Form';
 import ProfileContainer from './profile/components/ProfileContainer/ProfileContainer';
+import GamesList from './games/components/GamesList/GamesList';
 import styled from 'styled-components';
 import steamLogo from './profile/img/steam-logo.svg';
+import arrow from './common/img/arrow.svg';
 
 const App = ({ className }) => (
   <CSSVariables>
@@ -11,13 +13,15 @@ const App = ({ className }) => (
         <Logo className="logo" src={steamLogo} />
         <Header className="header">SteamID Information Retriever</Header>
       </HeaderContainer>
-      <Form />
-      <ProfileContainer />
+      <GamesList />
+      <Arrow src={arrow} />
     </div>
   </CSSVariables>
 );
 
 const CSSVariables = styled.div`
+  height: 100%;
+
   --bg-color: #394263;
   --white: #ffffff;
   --light-green: #03bea4;
@@ -51,10 +55,29 @@ const HeaderContainer = styled.div`
 
 const StyledApp = styled(App)`
   width: 100%;
-  height: 100vh;
+  min-height: 100%;
   background-color: var(--bg-color);
-  position: relative;
+  position: absolute;
   font-family: 'Roboto';
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Arrow = styled.img`
+  width: 64px;
+  height: 64px;
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  transition-property: transform;
+  transition-duration: 0.3s;
+
+  &:hover {
+    transform: translateY(-50%) rotate(-90deg) scale(1.1);
+    cursor: pointer;
+  }
 `;
 
 export default StyledApp;
