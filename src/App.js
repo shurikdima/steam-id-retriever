@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { getProfileData } from './profile/selectors/profile-selectors';
 import Form from './profile/components/Form/Form';
 import ProfileContainer from './profile/components/ProfileContainer/ProfileContainer';
 import GamesList from './games/components/GamesList/GamesList';
@@ -6,14 +8,15 @@ import styled from 'styled-components';
 import steamLogo from './profile/img/steam-logo.svg';
 import arrow from './common/img/arrow.svg';
 
-const App = ({ className }) => (
+const App = props => (
   <CSSVariables>
-    <div className={`App ${className}`}>
+    <div className={`App ${props.className}`}>
       <HeaderContainer className="header__container">
         <Logo className="logo" src={steamLogo} />
         <Header className="header">SteamID Information Retriever</Header>
       </HeaderContainer>
       <Form />
+      {props.profileData && <ProfileContainer />}
     </div>
   </CSSVariables>
 );
@@ -57,7 +60,7 @@ const StyledApp = styled(App)`
   min-height: 100%;
   background-color: var(--bg-color);
   position: absolute;
-  font-family: 'Roboto';
+  font-family: "Roboto";
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -79,4 +82,8 @@ const Arrow = styled.img`
   }
 `;
 
-export default StyledApp;
+const mapStateToProps = state => ({
+  profileData: getProfileData(state),
+});
+
+export default connect(mapStateToProps, null)(StyledApp);

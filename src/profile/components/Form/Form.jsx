@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { saveProfileData } from '../../actions/profile-actions';
 import { API_KEY, STEAM_ID } from '../../../steam-api/config';
+import { fetchSteamLevel, fetchSteamUser } from '../../../steam-api/fetching';
 
 class Form extends Component {
   state = {
@@ -13,15 +16,23 @@ class Form extends Component {
 
   handleButtonClick = async (event) => {
     event.preventDefault();
-    const levelPath = `https://api.steampowered.com/IPlayerService/GetSteamLevel/v1?key=${API_KEY}&steamid=${STEAM_ID}`;
-    const statsPath = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${API_KEY}&steamids=${STEAM_ID}`;
 
-    // needed for CORS to work without any configuration
-    const proxy = 'https://cors-anywhere.herokuapp.com/';
+    // fetch and return the objects with the steam level and the steam user info
+    const responses = await Promise.all([
+      fetchSteamLevel(API_KEY, STEAM_ID),
+      fetchSteamUser(API_KEY, STEAM_ID),
+    ]);
 
-    const responses = await Promise.all([`${proxy}${levelPath}`, `${proxy}${statsPath}`].map(url => fetch(url))).then(response => Promise.all(response.map(r => r.json())));
-    const levelResponse = responses[0].response;
-    const stateResponse = responses[1].response.players[0];
+    // an object with this structure will be stored in redux state
+    const userInfo = {
+      avatar: responses[1].avatarmedium,
+      name: responses[1].personaname,
+      status: responses[1].personastate,
+      locale: responses[1].loccountrycode,
+      level: responses[0].player_level,
+    };
+
+    this.props.saveProfileData(userInfo);
   };
 
   render() {
@@ -85,4 +96,8 @@ const StyledForm = styled(Form)`
   margin: 100px 0 40px 0;
 `;
 
-export default StyledForm;
+const mapDispatchToProps = dispatch => ({
+  saveProfileData: data => dispatch(saveProfileData(data)),
+});
+
+export default connect(undefined, mapDispatchToProps)(StyledForm);
