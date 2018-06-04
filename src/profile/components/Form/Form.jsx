@@ -13,13 +13,15 @@ class Form extends Component {
 
   handleButtonClick = async (event) => {
     event.preventDefault();
-    const requestPath = `https://api.steampowered.com/IPlayerService/GetSteamLevel/v1?key=${API_KEY}&steamid=${STEAM_ID}`;
+    const levelPath = `https://api.steampowered.com/IPlayerService/GetSteamLevel/v1?key=${API_KEY}&steamid=${STEAM_ID}`;
+    const statsPath = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${API_KEY}&steamids=${STEAM_ID}`;
 
     // needed for CORS to work without any configuration
     const proxy = 'https://cors-anywhere.herokuapp.com/';
-    const response = await fetch(`${proxy}${requestPath}`);
-    const responseJSON = await response.json();
-    console.log(responseJSON.response);
+
+    const responses = await Promise.all([`${proxy}${levelPath}`, `${proxy}${statsPath}`].map(url => fetch(url))).then(response => Promise.all(response.map(r => r.json())));
+    const levelResponse = responses[0].response;
+    const stateResponse = responses[1].response.players[0];
   };
 
   render() {
