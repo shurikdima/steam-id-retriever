@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getProfileData } from './profile/selectors/profile-selectors';
-import Form from './profile/components/Form/Form';
+import { getFetchingStatus, getProfile } from './profile/selectors/profile-selectors';
+import { ConnectedStyledForm } from './profile/components/Form/Form';
 import ProfileContainer from './profile/components/ProfileContainer/ProfileContainer';
 import GamesList from './games/components/GamesList/GamesList';
 import styled from 'styled-components';
@@ -15,8 +15,8 @@ const App = props => (
         <Logo className="logo" src={steamLogo} />
         <Header className="header">SteamID Information Retriever</Header>
       </HeaderContainer>
-      <Form />
-      {props.profileData && <ProfileContainer />}
+      <ConnectedStyledForm />
+      {props.profile && <ProfileContainer />}
     </div>
   </CSSVariables>
 );
@@ -83,7 +83,8 @@ const Arrow = styled.img`
 `;
 
 const mapStateToProps = state => ({
-  profileData: getProfileData(state),
+  profile: getProfile(state),
+  fetchStatus: getFetchingStatus(state),
 });
 
 export default connect(mapStateToProps, null)(StyledApp);

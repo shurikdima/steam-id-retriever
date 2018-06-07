@@ -1,3 +1,4 @@
-const getProfileData = state => state.profile;
+const getFetchingStatus = state => state.profile.fetching;
+const getProfile = state => state.profile.profile;
 
-export { getProfileData };
+export { getFetchingStatus, getProfile };

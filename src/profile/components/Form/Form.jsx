@@ -1,9 +1,34 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { saveProfileData } from '../../actions/profile-actions';
+import { takeLatest, call, put } from 'redux-saga/effects';
+import { fetchRequest, fetchSuccess, fetchFailure } from '../../actions/profile-actions';
 import { API_KEY, STEAM_ID } from '../../../steam-api/config';
 import { fetchSteamLevel, fetchSteamUser } from '../../../steam-api/fetching';
+
+// Sagas for handling async request fetching and state change
+function* watcherSaga() {
+  yield takeLatest(fetchRequest, workerSaga);
+}
+
+function* workerSaga() {
+  try {
+    const responses = yield call(() =>
+      Promise.all([fetchSteamLevel(API_KEY, STEAM_ID), fetchSteamUser(API_KEY, STEAM_ID)]));
+
+    const profile = {
+      avatar: responses[1].avatarmedium,
+      name: responses[1].personaname,
+      status: responses[1].personastate,
+      locale: responses[1].loccountrycode,
+      level: responses[0].player_level,
+    };
+
+    yield put(fetchSuccess(profile));
+  } catch (error) {
+    yield put(fetchFailure(error));
+  }
+}
 
 class Form extends Component {
   state = {
@@ -17,22 +42,7 @@ class Form extends Component {
   handleButtonClick = async (event) => {
     event.preventDefault();
 
-    // fetch and return the objects with the steam level and the steam user info
-    const responses = await Promise.all([
-      fetchSteamLevel(API_KEY, STEAM_ID),
-      fetchSteamUser(API_KEY, STEAM_ID),
-    ]);
-
-    // an object with this structure will be stored in redux state
-    const userInfo = {
-      avatar: responses[1].avatarmedium,
-      name: responses[1].personaname,
-      status: responses[1].personastate,
-      locale: responses[1].loccountrycode,
-      level: responses[0].player_level,
-    };
-
-    this.props.saveProfileData(userInfo);
+    this.props.requestProfile();
   };
 
   render() {
@@ -97,7 +107,8 @@ const StyledForm = styled(Form)`
 `;
 
 const mapDispatchToProps = dispatch => ({
-  saveProfileData: data => dispatch(saveProfileData(data)),
+  requestProfile: () => dispatch(fetchRequest()),
 });
 
-export default connect(undefined, mapDispatchToProps)(StyledForm);
+const ConnectedStyledForm = connect(undefined, mapDispatchToProps)(StyledForm);
+export { ConnectedStyledForm, watcherSaga };
