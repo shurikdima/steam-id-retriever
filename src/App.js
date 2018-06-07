@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getFetchingStatus, getProfile } from './profile/selectors/profile-selectors';
 import { ConnectedStyledForm } from './profile/components/Form/Form';
+import Spinner from './common/components/Spinner/Spinner';
 import ProfileContainer from './profile/components/ProfileContainer/ProfileContainer';
 import GamesList from './games/components/GamesList/GamesList';
 import styled from 'styled-components';
@@ -11,6 +12,7 @@ import arrow from './common/img/arrow.svg';
 const App = props => (
   <CSSVariables>
     <div className={`App ${props.className}`}>
+      {props.fetchStatus && <Spinner />}
       <HeaderContainer className="header__container">
         <Logo className="logo" src={steamLogo} />
         <Header className="header">SteamID Information Retriever</Header>
@@ -26,6 +28,7 @@ const CSSVariables = styled.div`
 
   --bg-color: #394263;
   --white: #ffffff;
+  --white-bg: rgba(255, 255, 255, 0.8);
   --light-green: #03bea4;
   --disabled: #bababa;
   --red: #dd0000;
